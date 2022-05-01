@@ -1,4 +1,4 @@
-module github.com/abdullahb53/beyazhoroz/createUserService
+module github.com/abdullahb53/beyazhoroz/server/createUserService
 
 go 1.17
 
