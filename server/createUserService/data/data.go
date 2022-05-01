@@ -1,5 +1,6 @@
 package data
 
+// >docker exec -it server-db-1 psql -U root -W authServer
 import (
 	"fmt"
 
@@ -15,6 +16,7 @@ type User struct {
 }
 
 func CreateDBEngine() (*xorm.Engine, error) {
+
 	connectionInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", "localhost", 5432, "root", "password", "authServer")
 	engine, err := xorm.NewEngine("postgres", connectionInfo)
 	if err != nil {

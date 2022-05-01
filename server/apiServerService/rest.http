@@ -1,0 +1,52 @@
+
+GET http://localhost:8080/saticilar HTTP/1.1
+
+###
+POST http://localhost:8080/saticilar HTTP/1.1
+Content-Type: application/json
+
+{
+   
+    "name": "invoker4",
+    "foto": "none",
+    "mainlocation": "Trabzon",
+    "bazaarlocation": "Trabzon/Ortahisar",
+    "bazaarname": "Kalkınma_Pazari,Konaklar_Pazari",
+    "crops": "Elma,Armut,Karpuz,Visne",
+    "phone": "055423321451",
+    "days": "146"
+  }
+
+###
+POST http://localhost:8080/saticilar HTTP/1.1
+Content-type: text/xml
+
+{
+    "Id": "2",
+    "name": "invoker",
+    "foto": "none",
+    "mainlocation": "Trabzon",
+    "bazaarlocation": "Trabzon/Ortahisar",
+    "bazaarname": "Kalkınma_Pazari,Konaklar_Pazari",
+    "crops": "Elma,Armut,Karpuz,Visne",
+    "phone": "055423321451",
+    "days": "146"
+  }
+
+###
+GET http://localhost:8080/saticilar/1651399872928564300 HTTP/1.1
+
+###
+POST http://localhost:8080/saticilar/post HTTP/1.1
+
+# type Satici struct {
+# 	Id             string
+# 	Name           string `json:"name"`
+# 	Foto           string `json:"foto"`
+# 	MainLocation   string `json:"mainlocation"`
+# 	BazaarLocation string `json:"bazaarlocation"`
+# 	BazaarName     string `json:"bazaarname"`
+# 	Crops          string `json:"crops"`
+# 	Phone          string `json:"phone"`
+# 	Days           string `json:"days"`
+# }
