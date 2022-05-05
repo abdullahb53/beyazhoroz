@@ -1,186 +1,79 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	"strings"
-	"sync"
-	"time"
+
+	"github.com/abdullahb53/beyazhoroz/server/apiServerService/database"
+	_ "github.com/abdullahb53/beyazhoroz/server/apiServerService/database"
+	fiber "github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/favicon"
 )
 
-type Satici struct {
-	Id             string
-	Name           string `json:"name"`
-	Foto           string `json:"foto"`
-	MainLocation   string `json:"mainlocation"`
-	BazaarLocation string `json:"bazaarlocation"`
-	BazaarName     string `json:"bazaarname"`
-	Crops          string `json:"crops"`
-	Phone          string `json:"phone"`
-	Days           string `json:"days"`
-}
-
-type SaticiHandlers struct {
-	sync.Mutex
-	store map[string]Satici
-}
-
-func (h *SaticiHandlers) saticilar(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case "GET":
-		h.get(w, r)
-		return
-	case "POST":
-		h.post(w, r)
-		return
-	default:
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		w.Write([]byte("Method desteklenmiyor.."))
-		return
-
-	}
-}
-
-func (h *SaticiHandlers) get(w http.ResponseWriter, r *http.Request) {
-	saticilar := make([]Satici, len(h.store))
-
-	h.Lock()
-	i := 0
-	for _, satici := range h.store {
-		saticilar[i] = satici
-		i++
-	}
-	h.Unlock()
-
-	jsonBytes, err := json.Marshal(saticilar)
-	if err != nil {
-		//TODO
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
-	}
-	w.Header().Add("content-type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(jsonBytes)
-}
-
-func (h *SaticiHandlers) getSatici(w http.ResponseWriter, r *http.Request) {
-
-	parts := strings.Split(r.URL.String(), "/")
-	if len(parts) != 3 {
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
-
-	h.Lock()
-
-	satici, ok := h.store[parts[2]]
-	if !ok {
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
-
-	h.Unlock()
-
-	jsonBytes, err := json.Marshal(satici)
-	if err != nil {
-		//TODO
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
-	}
-	w.Header().Add("content-type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(jsonBytes)
-}
-
-func (h *SaticiHandlers) post(w http.ResponseWriter, r *http.Request) {
-	bodyBytes, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
-	if err != nil {
-		//TODO
-		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
-		return
-	}
-	//content-type
-	ct := r.Header.Get("content-type")
-	if ct != "application/json" {
-		w.WriteHeader(http.StatusUnsupportedMediaType)
-		w.Write([]byte(fmt.Sprintf("content-type: 'application/json' olmalıydı fakat sen bunu kullandın:,%s", ct)))
-		return
-	}
-
-	var satici Satici
-	if err := json.Unmarshal(bodyBytes, &satici); err != nil {
-		w.WriteHeader(http.StatusBadGateway)
-		w.Write([]byte(err.Error()))
-	}
-
-	satici.Id = fmt.Sprintf("%d", time.Now().UnixNano())
-
-	h.Lock()
-	h.store[satici.Id] = satici
-	defer h.Unlock()
-
-}
-
-func newSaticiHandlers() *SaticiHandlers {
-	return &SaticiHandlers{
-		store: map[string]Satici{
-			"id1": Satici{
-				Name:           "abdullah admin",
-				Foto:           "none",
-				MainLocation:   "SAMSUN ATAKUM ÖMÜREVLERİ CUMHURİYET MAHALLESİ",
-				BazaarLocation: "/Samsun/Atakum",
-				BazaarName:     "Ömürevleri_Pazarı,Denizevleri_Pazarı",
-				Crops:          "Marul,Maydanoz,YeşilBiber,Karpuz,Elma,Çilek",
-				Phone:          "05301215386",
-				Days:           "1458",
-			},
-		},
-	}
-}
-
-type adminPortal struct {
-	password string
-}
-
-func newAdminPortal() *adminPortal {
-	password := "secret"
-	if password == "" {
-		panic("ADMIN_PASSWORD gerekli, set edilmemiş ADMIN_PASSWORD durumu var")
-	}
-
-	return &adminPortal{password: password}
-}
-
-func (a adminPortal) handler(w http.ResponseWriter, r *http.Request) {
-	user, pass, ok := r.BasicAuth()
-	if !ok || user != "admin" || pass != a.password {
-		w.WriteHeader(http.StatusUnauthorized)
-		w.Write([]byte("401 - unauthorized"))
-		return
-	}
-
-	w.Write([]byte("<html><h1>SUPER - ADMIN PORTALI</h1></html>"))
-
-}
+//func New(config Config) fiber.Handler
 
 func main() {
-	admin := newAdminPortal()
 
-	SaticiHandlers := newSaticiHandlers()
+	db := database.CreateDBEngine()
 
-	http.HandleFunc("/saticilar", SaticiHandlers.saticilar)
-	http.HandleFunc("/saticilar/", SaticiHandlers.getSatici)
-	http.HandleFunc("/admin", admin.handler)
+	app := fiber.New(fiber.Config{
+		Prefork:       true,
+		CaseSensitive: true,
+		StrictRouting: true,
+		ServerHeader:  "beyazhoroz",
+		AppName:       "beyazhoroz-apiserver",
+	})
 
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		panic(err)
+	// Provide a minimal config
+	app.Use(favicon.New())
 
-	}
+	// Or extend your config for customization
+	app.Use(favicon.New(favicon.Config{
+		File: "./favicon.ico",
+	}))
 
-	fmt.Print("Server is runnning...")
+	// app.Get("/index.html", func(c *fiber.Ctx) error {
+
+	// 	return c.SendFile("././client/index.html")
+	// })
+	app.Static("/index", "../../client/")
+	app.Static("/index.html", "../../client/")
+	app.Static("/", "../../client/")
+
+	// Parameters
+	app.Get("/api/:city/:country", func(c *fiber.Ctx) error {
+		fmt.Fprintf(c, "%s\n", c.Params("city"))
+		fmt.Fprintf(c, "%s\n", c.Params("country"))
+		city := c.Params("city")
+		country := c.Params("country")
+
+		fmt.Println(country, city)
+
+		data, err := database.GetUseCiCo(db, city, country)
+		if err != nil {
+			return err
+		}
+
+		c.JSON(data)
+		return c.SendStatus(200)
+
+	})
+
+	app.Post("/api/:city/:country", func(c *fiber.Ctx) error {
+		fmt.Fprintf(c, "%s\n", c.Params("city"))
+		fmt.Fprintf(c, "%s\n", c.Params("country"))
+		city := c.Params("city")
+		country := c.Params("country")
+
+		fmt.Println(country, city)
+
+		err := database.InsertUser(db, "ABDULLAH BIYIK", city, country, "none", "KTU CEC ADMIN")
+		if err != nil {
+			return err
+		}
+
+		return nil
+
+	})
+
+	app.Listen(":8080")
 }
