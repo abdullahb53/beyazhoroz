@@ -1,4 +1,4 @@
-module github.com/abdullahb53/beyazhoroz/server/apiServerService
+module github.com/abdullahb53/beyazhoroz
 
 go 1.17
 

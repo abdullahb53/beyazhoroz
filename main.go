@@ -2,9 +2,7 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/abdullahb53/beyazhoroz/server/apiServerService/database"
-	_ "github.com/abdullahb53/beyazhoroz/server/apiServerService/database"
+	"github.com/abdullahb53/beyazhoroz/database"
 	fiber "github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/favicon"
 )
@@ -35,9 +33,9 @@ func main() {
 
 	// 	return c.SendFile("././client/index.html")
 	// })
-	app.Static("/index", "../../client/")
-	app.Static("/index.html", "../../client/")
-	app.Static("/", "../../client/")
+	app.Static("/index", "client/")
+	app.Static("/index.html", "client/")
+	app.Static("/", "client/")
 
 	// Parameters
 	app.Get("/api/:city/:country", func(c *fiber.Ctx) error {

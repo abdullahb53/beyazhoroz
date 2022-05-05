@@ -4,10 +4,7 @@ package database
 import (
 	"database/sql" // add this
 	"fmt"
-	"log"
-	"path/filepath"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq" // add this
 )
 
@@ -21,11 +18,11 @@ const (
 
 func CreateDBEngine() *sql.DB {
 
-	err := godotenv.Load(filepath.Join("C:/Users/abdullah/beyazhoroz/server/apiServerService/database/", ".env"))
+	//err := godotenv.Load(filepath.Join("C:/Users/abdullah/beyazhoroz/server/apiServerService/database/", ".env"))
 
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
+	// if err != nil {
+	// 	log.Fatal("Error loading .env file")
+	// }
 	// host := os.Getenv("DB_HOST")
 	// port := 5432
 	// user := os.Getenv("DB_USER")
