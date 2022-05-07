@@ -1,5 +1,6 @@
 module github.com/abdullahb53/beyazhoroz
 
+// +heroku goVersion go1.15 
 go 1.15
 
 require (
