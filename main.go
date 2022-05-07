@@ -10,6 +10,7 @@ import (
 	_ "github.com/abdullahb53/beyazhoroz/responses"
 
 	fiber "github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/favicon"
 )
 
@@ -24,6 +25,8 @@ func main() {
 		ServerHeader:  "beyazhoroz",
 		AppName:       "beyazhoroz-apiserver",
 	})
+
+	app.Use(cors.New())
 
 	configs.ConnectDB()
 
