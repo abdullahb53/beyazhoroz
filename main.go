@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/abdullahb53/beyazhoroz/configs"
 
@@ -66,5 +68,16 @@ func main() {
 
 	})
 
-	app.Listen(":8080")
+	// Get the PORT from heroku env
+	port := os.Getenv("PORT")
+
+	// Verify if heroku provided the port or not
+	if os.Getenv("PORT") == "" {
+		port = "3000"
+	}
+
+	// Start server on http://${heroku-url}:${port}
+	log.Fatal(app.Listen(":" + port))
+
+	// app.Listen(":8080")
 }
