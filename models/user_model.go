@@ -10,3 +10,10 @@ type User struct {
 	Country string             `json:"country,omitempty" validate:"required"`
 	Explain string             `json:"explain,omitempty" validate:"required"`
 }
+
+type Location struct {
+	Id     primitive.ObjectID `json:"id,omitempty"`
+	Uid    string             `json:"name,omitempty" validate:"required"`
+	Enlem  string             `json:"enlem,omitempty" validate:"required"`
+	Boylam string             `json:"boylam,omitempty" validate:"required"`
+}

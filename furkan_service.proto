@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+option go_package = "api/";
+
+service FurkanService {
+    rpc CreateUser (UserCreateReq) returns (UserCreateRes);
+    rpc ListUsers (UserListReq) returns (UserListRes);
+    rpc FindUser (UserFindReq) returns (UserFindRes);
+    rpc DeleteUser (UserDeleteReq) returns (UserDeleteRes);
+    rpc UpdateUser (UserUpdateReq) returns (UserUpdateRes);
+}
+
+message ResponseState{
+    int32 status = 1;
+    string mesaj = 2;
+    UsersBook data = 3;
+}
+
+message User {
+    string uid = 1;
+    string name = 2;
+    string email = 3;
+    string city = 4;
+    string country = 5;
+    string explain = 6;
+    string phone = 7;
+  }
+  
+  // Our address book file is just one of these.
+  message UsersBook {
+    repeated User people = 1;
+  }
+  
+
+ message UserCreateReq{
+    User person_item = 1;
+}
+
+message UserCreateRes{
+    ResponseState createdUserItems = 1;
+}
+
+message UserListReq{
+    string city = 1;
+    string country = 2;
+}
+
+message UserListRes{
+    ResponseState ListedUserItems = 1;
+}
+
+message UserFindReq{
+    string uid = 1;
+}
+
+message UserFindRes{
+    ResponseState FindedUserItem = 1;
+}
+
+message UserDeleteReq{
+    string uid = 1;
+}
+
+message UserDeleteRes{
+    ResponseState UserDeletedUserItem = 1;
+}
+
+message UserUpdateReq{
+    ResponseState UserUpdateInfo = 1;
+}
+
+message UserUpdateRes{
+    ResponseState UserUpdatedItems = 1;
+}

@@ -10,4 +10,8 @@ require (
 	go.mongodb.org/mongo-driver v1.9.1
 )
 
-require golang.org/x/sys v0.0.0-20220503163025-988cb79eb6c6 // indirect
+require (
+	golang.org/x/sys v0.0.0-20220503163025-988cb79eb6c6 // indirect
+	google.golang.org/grpc v1.46.0
+	google.golang.org/protobuf v1.27.1
+)
