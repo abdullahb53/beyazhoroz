@@ -7,8 +7,6 @@ import (
 
 	"github.com/abdullahb53/beyazhoroz/configs"
 	"github.com/abdullahb53/beyazhoroz/controllers"
-
-	_ "github.com/abdullahb53/beyazhoroz/controllers"
 	_ "github.com/abdullahb53/beyazhoroz/models"
 	_ "github.com/abdullahb53/beyazhoroz/responses"
 

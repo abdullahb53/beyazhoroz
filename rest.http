@@ -36,7 +36,7 @@ GET http://localhost:3000/api/TRABZON/SANA HTTP/1.1
 GET https://beyazhoroz.herokuapp.com/api/TRABZON/SANA
 ###
 
-GET https://beyazhoroz.herokuapp.com/api/CREATEUSER
+POST https://beyazhoroz.herokuapp.com/api/CREATEUSER
 Content-type: application/json
 
 {
@@ -49,7 +49,26 @@ Content-type: application/json
 
 ###
 
+POST https://beyazhoroz.herokuapp.com/api/CREATELOCATION
+Content-type: application/json
+
+{
+    "name": "ABDULLAH",
+    "information": "1 ton karpuz satıyorum Adanadayım tel numaram. 05313312419",
+    "phone": "05313312419",
+    "enlem": " 37.000000",
+    "boylam": "35.321335"
+}
+###
 POST http://localhost:8080/saticilar/post HTTP/1.1
+
+
+		# Id:          primitive.NewObjectID(),
+		# Name:        location.Name,
+		# Information: location.Information,
+		# Phone:       location.Phone,
+		# Enlem:       location.Enlem,
+		# Boylam:      location.Boylam,
 
 # type Satici struct {
 # 	Id             string
