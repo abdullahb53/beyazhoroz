@@ -5,8 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/abdullahb53/beyazhoroz/grpcserver"
-
 	"github.com/abdullahb53/beyazhoroz/configs"
 	"github.com/abdullahb53/beyazhoroz/controllers"
 
@@ -31,8 +29,6 @@ func main() {
 		AppName:       "beyazhoroz-apiserver",
 	})
 	app.Use(cors.New())
-
-	grpcserver.GRPC_serve()
 	// },
 	configs.ConnectDB()
 
@@ -56,17 +52,16 @@ func main() {
 	app.Get("/api/:city/:country", func(c *fiber.Ctx) error {
 		fmt.Fprintf(c, "%s\n", c.Params("city"))
 		fmt.Fprintf(c, "%s\n", c.Params("country"))
-		city := c.Params("city")
-		country := c.Params("country")
-
-		fmt.Println(country, city)
+		// city := c.Params("city")
+		// country := c.Params("country")
+		controllers.GetAllUsers(c)
 
 		//c.JSON(data)
 		return c.SendStatus(200)
 
 	})
 
-	app.Post("/api/user", func(c *fiber.Ctx) error {
+	app.Post("/api/CREATEUSER", func(c *fiber.Ctx) error {
 
 		controllers.CreateUser(c)
 		return nil
