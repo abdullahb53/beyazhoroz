@@ -1,15 +1,11 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
-	"net"
 	"os"
 
-	"github.com/abdullahb53/beyazhoroz/api"
-	"github.com/abdullahb53/beyazhoroz/responses"
-	"google.golang.org/grpc"
+	"github.com/abdullahb53/beyazhoroz/grpcserver"
 
 	"github.com/abdullahb53/beyazhoroz/configs"
 	"github.com/abdullahb53/beyazhoroz/controllers"
@@ -25,10 +21,6 @@ import (
 
 //func New(config Config) fiber.Handler
 
-type myFurkanService struct {
-	api.UnimplementedFurkanServiceServer
-}
-
 func main() {
 
 	app := fiber.New(fiber.Config{
@@ -39,29 +31,9 @@ func main() {
 		AppName:       "beyazhoroz-apiserver",
 	})
 	app.Use(cors.New())
-	var grpc_port string = "localhost:443"
-	lis, err := net.Listen("tcp", grpc_port)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-	srv := grpc.NewServer()
-	api.RegisterFurkanServiceServer(srv, &myFurkanService{})
-	fmt.Println("starting gRPC server...", grpc_port)
-	go func() {
-		panic(srv.Serve(lis))
-	}()
 
-	func (c *myFurkanService) ListUsers(fiber.Ctx , req *api.UserListReq) (*api.UserListRes, error) {
-		res := new(api.UserListRes)
-		err := c.cc.Invoke(ctx, "/FurkanService/ListUsers", req, res, opts...)
-		if err != nil {
-			return nil, err
-		}
-		res
-		return out, nil
-	}
-
-
+	grpcserver.GRPC_serve()
+	// },
 	configs.ConnectDB()
 
 	// Provide a minimal config
