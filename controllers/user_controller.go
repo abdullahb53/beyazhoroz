@@ -17,7 +17,75 @@ import (
 )
 
 var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "cards")
+var locationCollection *mongo.Collection = configs.GetCollection(configs.DB, "locations")
+
 var validate = validator.New()
+
+func CreateLocation(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	var location models.Location
+	defer cancel()
+
+	//validate the request body
+	if err := c.BodyParser(&location); err != nil {
+		return c.Status(http.StatusBadRequest).JSON(responses.LocationResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+	}
+
+	//use the validator library to validate required fields
+	if validationErr := validate.Struct(&location); validationErr != nil {
+		return c.Status(http.StatusBadRequest).JSON(responses.LocationResponse{Status: http.StatusBadRequest, Message: "error", Data: &fiber.Map{"data": validationErr.Error()}})
+	}
+
+	// Id      primitive.ObjectID `json:"id,omitempty"`
+	// Name    string             `json:"name,omitempty" validate:"required"`
+	// Phone   string             `json:"phone,omitempty" validate:"required"`
+	// City    string             `json:"city,omitempty" validate:"required"`
+	// Country string             `json:"country,omitempty" validate:"required"`
+	// Explain string             `json:"explain,omitempty" validate:"required"`
+
+	newLocation := models.Location{
+		Id:          primitive.NewObjectID(),
+		Name:        location.Name,
+		Information: location.Information,
+		Phone:       location.Phone,
+		Enlem:       location.Enlem,
+		Boylam:      location.Boylam,
+	}
+
+	result, err := locationCollection.InsertOne(ctx, newLocation)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(responses.LocationResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+	}
+
+	return c.Status(http.StatusCreated).JSON(responses.LocationResponse{Status: http.StatusCreated, Message: "success", Data: &fiber.Map{"data": result}})
+}
+
+func GetAllLocations(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	var locations []models.Location
+
+	defer cancel()
+
+	results, err := locationCollection.Find(ctx, bson.M{})
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(responses.LocationResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+	}
+
+	//reading from the db in an optimal way
+	defer results.Close(ctx)
+	for results.Next(ctx) {
+		var singleLocation models.Location
+		if err = results.Decode(&singleLocation); err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(responses.LocationResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		}
+
+		locations = append(locations, singleLocation)
+	}
+	return c.Status(http.StatusOK).JSON(
+		responses.LocationResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": locations}},
+	)
+}
 
 func CreateUser(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

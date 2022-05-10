@@ -12,8 +12,10 @@ type User struct {
 }
 
 type Location struct {
-	Id     primitive.ObjectID `json:"id,omitempty"`
-	Uid    string             `json:"name,omitempty" validate:"required"`
-	Enlem  string             `json:"enlem,omitempty" validate:"required"`
-	Boylam string             `json:"boylam,omitempty" validate:"required"`
+	Id          primitive.ObjectID `json:"id,omitempty"`
+	Name        string             `json:"name,omitempty" validate:"required"`
+	Information string             `json:"name,omitempty" validate:"required"`
+	Phone       string             `json:"name,omitempty" validate:"required"`
+	Enlem       string             `json:"enlem,omitempty" validate:"required"`
+	Boylam      string             `json:"boylam,omitempty" validate:"required"`
 }

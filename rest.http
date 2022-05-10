@@ -30,9 +30,25 @@ Content-type: application/json
 }
 
 ###
-GET http://localhost:3000/api/TRABZON/ORTAHISAR HTTP/1.1
+GET http://localhost:3000/api/TRABZON/SANA HTTP/1.1
 
 ###
+GET https://beyazhoroz.herokuapp.com/api/TRABZON/SANA
+###
+
+GET https://beyazhoroz.herokuapp.com/api/CREATEUSER
+Content-type: application/json
+
+{
+    "name": "FURKAN",
+    "phone": "none",
+    "city": "KASTAMONU",
+    "country": "MERKEZ",
+    "explain": "SİTE ADMİNİ"
+}
+
+###
+
 POST http://localhost:8080/saticilar/post HTTP/1.1
 
 # type Satici struct {

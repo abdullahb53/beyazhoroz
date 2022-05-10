@@ -22,7 +22,7 @@ import (
 func main() {
 
 	app := fiber.New(fiber.Config{
-		Prefork:       false,
+		Prefork:       true,
 		CaseSensitive: true,
 		StrictRouting: true,
 		ServerHeader:  "beyazhoroz",
@@ -66,6 +66,16 @@ func main() {
 		controllers.CreateUser(c)
 		return nil
 
+	})
+
+	app.Get("/api/LOCATIONS", func(c *fiber.Ctx) error {
+		controllers.GetAllLocations(c)
+		return c.SendStatus(200)
+	})
+
+	app.Post("/api/CREATELOCATION", func(c *fiber.Ctx) error {
+		controllers.CreateLocation(c)
+		return nil
 	})
 
 	// Get the PORT from heroku env
