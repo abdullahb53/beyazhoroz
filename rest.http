@@ -53,11 +53,13 @@ POST https://beyazhoroz.herokuapp.com/api/CREATELOCATION
 Content-type: application/json
 
 {
-    "name": "furkan",
+    "name": "ahmet",
     "information": "sarımsakcıııı alım yapılır. 05313312419",
     "phone": "05313312419",
-    "enlem": "41.509945",
-    "boylam": "34.210284"
+    "enlem": "43.000940",
+    "boylam": "38.210284",
+    "initdate": "none",
+    "type":"alici"
 }
 ###
 POST http://localhost:8080/saticilar/post HTTP/1.1

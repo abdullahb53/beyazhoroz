@@ -76,6 +76,11 @@ func main() {
 		return nil
 	})
 
+	app.Get("/api/CREATELOCATION", func(c *fiber.Ctx) error {
+		controllers.CreateLocation(c)
+		return nil
+	})
+
 	// Get the PORT from heroku env
 	port := os.Getenv("PORT")
 
