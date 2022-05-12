@@ -53,11 +53,11 @@ POST https://beyazhoroz.herokuapp.com/api/CREATELOCATION
 Content-type: application/json
 
 {
-    "name": "ABDULLAH",
-    "information": "1 ton karpuz satıyorum Adanadayım tel numaram. 05313312419",
+    "name": "furkan",
+    "information": "sarımsakcıııı alım yapılır. 05313312419",
     "phone": "05313312419",
-    "enlem": " 37.000000",
-    "boylam": "35.321335"
+    "enlem": "41.509945",
+    "boylam": "34.210284"
 }
 ###
 POST http://localhost:8080/saticilar/post HTTP/1.1

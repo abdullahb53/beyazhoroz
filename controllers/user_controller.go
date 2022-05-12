@@ -50,6 +50,8 @@ func CreateLocation(c *fiber.Ctx) error {
 		Phone:       location.Phone,
 		Enlem:       location.Enlem,
 		Boylam:      location.Boylam,
+		Type:        location.Type,
+		Initdate:    time.Now().String(),
 	}
 
 	result, err := locationCollection.InsertOne(ctx, newLocation)

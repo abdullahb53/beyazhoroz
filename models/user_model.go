@@ -1,6 +1,8 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type User struct {
 	Id      primitive.ObjectID `json:"id,omitempty"`
@@ -18,4 +20,6 @@ type Location struct {
 	Phone       string             `json:"phone,omitempty" validate:"required"`
 	Enlem       string             `json:"enlem,omitempty" validate:"required"`
 	Boylam      string             `json:"boylam,omitempty" validate:"required"`
+	Type        string             `json:"type,omitempty" validate:"required"`
+	Initdate    string             `json:"initdate,omitempty" validate:"required"`
 }
