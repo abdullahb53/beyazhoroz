@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/abdullahb53/beyazhoroz/configs"
@@ -18,6 +19,10 @@ import (
 
 var userCollection *mongo.Collection = configs.GetCollection(configs.DB, "cards")
 var locationCollection *mongo.Collection = configs.GetCollection(configs.DB, "locations")
+
+var organikCollection2020 *mongo.Collection = configs.GetCollection(configs.DB, "organikdata2020")
+
+// mongoimport --uri mongodb+srv://abdullahb:kMj8978zz6EMShCE@cards.ztgcu.mongodb.net/beyazhoroz --collection organikdata2020 --type csv --file organikData2020.csv --headerline
 
 var validate = validator.New()
 
@@ -155,5 +160,37 @@ func GetAllUsers(c *fiber.Ctx) error {
 	}
 	return c.Status(http.StatusOK).JSON(
 		responses.UserResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": users}},
+	)
+}
+
+func GetOrganikCity(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	var organikArray []models.Organik
+
+	sehir, err := url.QueryUnescape(c.Params("sehir"))
+	if err != nil {
+		print(err)
+	}
+
+	defer cancel()
+
+	results, err := organikCollection2020.Find(ctx, bson.M{"sehir": sehir})
+
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(responses.OrganikResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+	}
+
+	//reading from the db in an optimal way
+	defer results.Close(ctx)
+	for results.Next(ctx) {
+		var singleOrganikData models.Organik
+		if err = results.Decode(&singleOrganikData); err != nil {
+			return c.Status(http.StatusInternalServerError).JSON(responses.OrganikResponse{Status: http.StatusInternalServerError, Message: "error", Data: &fiber.Map{"data": err.Error()}})
+		}
+
+		organikArray = append(organikArray, singleOrganikData)
+	}
+	return c.Status(http.StatusOK).JSON(
+		responses.UserResponse{Status: http.StatusOK, Message: "success", Data: &fiber.Map{"data": organikArray}},
 	)
 }

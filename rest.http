@@ -62,9 +62,16 @@ Content-type: application/json
     "type":"alici"
 }
 ###
-POST http://localhost:8080/saticilar/post HTTP/1.1
+GET http://localhost:3000/api/TAVSIYE/RİZE/ HTTP/1.1
+
+###
+ GET http://localhost:3000/api/TAVSIYE/ADANA/ HTTP/1.1
+
+ ###
 
 
+
+# app.Get("/api/TAVSIYE/:sehir", func(c *fiber.Ctx) error {
 		# Id:          primitive.NewObjectID(),
 		# Name:        location.Name,
 		# Information: location.Information,

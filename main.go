@@ -81,6 +81,17 @@ func main() {
 		return nil
 	})
 
+	app.Get("/api/TAVSIYE/:sehir/", func(c *fiber.Ctx) error {
+		fmt.Fprintf(c, "%s\n", c.Params("sehir"))
+		// city := c.Params("city")
+		// country := c.Params("country")
+		controllers.GetOrganikCity(c)
+
+		//c.JSON(data)
+		return c.SendStatus(200)
+
+	})
+
 	// Get the PORT from heroku env
 	port := os.Getenv("PORT")
 

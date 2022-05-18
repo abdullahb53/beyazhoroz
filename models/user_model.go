@@ -23,3 +23,12 @@ type Location struct {
 	Type        string             `json:"type,omitempty" validate:"required"`
 	Initdate    string             `json:"initdate,omitempty" validate:"required"`
 }
+
+type Organik struct {
+	Id             primitive.ObjectID `json:"id,omitempty"`
+	Sehir          string             `json:"sehir,omitempty" validate:"required"`
+	Urun           string             `json:"urun,omitempty" validate:"required"`
+	Ciftci_sayisi  int32              `json:"ciftci_sayisi,omitempty" validate:"required"`
+	Uretim_alani   int32              `json:"uretim_alani,omitempty" validate:"required"`
+	Uretim_miktari int32              `json:"uretim_miktari,omitempty" validate:"required"`
+}
