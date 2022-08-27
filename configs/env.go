@@ -13,5 +13,5 @@ func EnvMongoURI() string {
 	}
 
 	//return os.Getenv("MONGOURI")
-	return "mongodb+srv://abdullahb:kMj8978zz6EMShCE@cards.ztgcu.mongodb.net/beyazhoroz?retryWrites=true&w=majority"
+	return "mongodb+srv://abdullahb:vzxR7nNe3Kse4gGy@cards.ztgcu.mongodb.net/beyazhoroz?retryWrites=true&w=majority"
 }
